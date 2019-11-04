@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:40:15 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/02 20:40:16 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 07:45:44 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,3 +15,4 @@
 #include "Root_node.h"
 #include "Internal_node.h"
 #include "Leaf_node.h"
+#include "Node.h"

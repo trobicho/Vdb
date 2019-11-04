@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:57 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/03 03:38:05 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 08:59:27 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,32 @@
 
 #include <cstdint>
 #include <bitset>
+#include "Node.h"
 
 template <class Value, int Log2X, int Log2Y = Log2X, int Log2Z = Log2Y>
-class Leaf_node
+class Leaf_node: public Node<Value>
 {
 	public:
 		Leaf_node(int32_t x, int32_t y, int32_t z);
 		~Leaf_node(){};
 
 
-		void	set_vox(Value value, int32_t x, int32_t y, int32_t z);
-		Value	get_vox(int32_t x, int32_t y, int32_t z);
+		void		do_set_vox(Value v, int32_t x, int32_t y, int32_t z);
+		Value		do_get_vox(int32_t x, int32_t y, int32_t z) const;
+		const Node<Value>
+					*do_get_interresting_node(s_vec3i v, Value &value) const;
 
 		static const int sSize = 1 << (Log2X + Log2Y + Log2Z);
 		static const int sLog2X = Log2X, sLog2Y = Log2Y, sLog2Z = Log2Z;
 
 	private:
+		inline s_vec3i		do_get_log() const {
+			return s_vec3i(Log2X, Log2Y, Log2Z);
+		}
+		inline s_vec3i		do_get_slog() const {
+			return s_vec3i(sLog2X, sLog2Y, sLog2Z);
+		}
+
 		Value				m_leaf_data[sSize];	//direct access table
 
 		std::bitset<sSize>	m_value_mask;		//active states
@@ -47,7 +57,7 @@ Leaf_node<Value, Log2X, Log2Y, Log2Z>
 
 template <class Value, int Log2X, int Log2Y, int Log2Z>
 void	Leaf_node<Value, Log2X, Log2Y, Log2Z>
-		::set_vox(Value value, int32_t x, int32_t y, int32_t z)
+		::do_set_vox(Value value, int32_t x, int32_t y, int32_t z)
 {
 	unsigned int	leaf_offset = ((x & (1 << sLog2X)-1) << (Log2Y + Log2Z))
 		+ ((y & (1 << sLog2Y)-1) << Log2Z) + (z & (1 << sLog2Z) - 1);
@@ -58,7 +68,7 @@ void	Leaf_node<Value, Log2X, Log2Y, Log2Z>
 
 template <class Value, int Log2X, int Log2Y, int Log2Z>
 Value	Leaf_node<Value, Log2X, Log2Y, Log2Z>
-		::get_vox(int32_t x, int32_t y, int32_t z)
+		::do_get_vox(int32_t x, int32_t y, int32_t z) const
 {
 	unsigned int	leaf_offset = ((x & (1 << sLog2X)-1) << (Log2Y + Log2Z))
 		+ ((y & (1 << sLog2Y)-1) << Log2Z) + (z & (1 << sLog2Z) - 1);
@@ -66,4 +76,18 @@ Value	Leaf_node<Value, Log2X, Log2Y, Log2Z>
 	if (m_value_mask[leaf_offset])
 		return (m_leaf_data[leaf_offset]);
 	return (0);
+}
+
+template <class Value, int Log2X, int Log2Y, int Log2Z>
+const Node<Value>	*Leaf_node<Value, Log2X, Log2Y, Log2Z>
+		::do_get_interresting_node(s_vec3i v, Value &value) const
+{
+	unsigned int	leaf_offset = ((v.x & (1 << sLog2X)-1) << (Log2Y + Log2Z))
+		+ ((v.y & (1 << sLog2Y)-1) << Log2Z) + (v.z & (1 << sLog2Z) - 1);
+
+	if (m_value_mask[leaf_offset])
+		value = m_leaf_data[leaf_offset];
+	else
+		return (this);
+	return (nullptr);
 }

@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:22 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/03 03:56:03 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 08:54:24 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,33 @@
 #include <cstdint>
 #include <bitset>
 #include <iostream>
+#include "Node.h"
 
 template <class Value, class Child
 	, int Log2X, int Log2Y = Log2X, int Log2Z = Log2Y>
-class Internal_node
+class Internal_node: public Node<Value>
 {
 	public:
 		Internal_node(int32_t x, int32_t y, int32_t z);
 		~Internal_node();
 
-		void	set_vox(Value v, int32_t x, int32_t y, int32_t z);
-		Value	get_vox(int32_t x, int32_t y, int32_t z);
+		void		do_set_vox(Value v, int32_t x, int32_t y, int32_t z);
+		Value		do_get_vox(int32_t x, int32_t y, int32_t z) const;
+		const Node<Value>
+					*do_get_interresting_node(s_vec3i v, Value &value) const;
 
 		static const int sLog2X = Log2X + Child::sLog2X,
 			sLog2Y = Log2Y + Child::sLog2Y,
 			sLog2Z = Log2Z + Child::sLog2Z,
 			sSize = 1 << (Log2X + Log2Y + Log2Z);
 	private:
+		inline s_vec3i		do_get_log() const {
+			return s_vec3i(Log2X, Log2Y, Log2Z);
+		}
+		inline s_vec3i		do_get_slog() const {
+			return s_vec3i(sLog2X, sLog2Y, sLog2Z);
+		}
+
 		union u_internal_data 
 		{
 			Child*	child;					//child node pointer
@@ -67,7 +77,7 @@ Internal_node<Value, Child, Log2X, Log2Y, Log2Z>::~Internal_node()
 
 template <class Value, class Child, int Log2X, int Log2Y, int Log2Z>
 void	Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
-		::set_vox(Value value, int32_t x, int32_t y, int32_t z)
+		::do_set_vox(Value value, int32_t x, int32_t y, int32_t z)
 {
 	unsigned int	internal_offset =
 		(((x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Y + Log2Z))
@@ -87,7 +97,7 @@ void	Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 
 template <class Value, class Child, int Log2X, int Log2Y, int Log2Z>
 Value	Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
-	::get_vox(int32_t x, int32_t y, int32_t z)
+	::do_get_vox(int32_t x, int32_t y, int32_t z) const
 {
 	unsigned int	internal_offset =
 		(((x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Y + Log2Z))
@@ -98,4 +108,23 @@ Value	Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 	else if (m_child_mask[internal_offset])
 		return (m_internal_data[internal_offset].child->get_vox(x, y, z));
 	return (0);
+}
+
+template <class Value, class Child, int Log2X, int Log2Y, int Log2Z>
+const Node<Value>	*Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
+	::do_get_interresting_node(s_vec3i v, Value &value) const
+{
+	unsigned int	internal_offset =
+		(((v.x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Y + Log2Z))
+		+ (((v.y & (1 << sLog2Y) - 1) >> Child::sLog2Y) << Log2Z)
+		+ ((v.z & (1 << sLog2Z) - 1) >> Child::sLog2Z);
+	if (m_value_mask[internal_offset])
+	{
+		value = m_internal_data[internal_offset].value;
+		return (this);
+	}
+	else if (m_child_mask[internal_offset])
+		return (m_internal_data[internal_offset].child
+			->get_interresting_node(v, value));
+	return (nullptr);
 }

@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 21:06:27 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 02:21:49 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 08:56:06 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,16 @@ uint32_t	Vdb_test::get_vox(s_vec3i v)
 		return (m_root_static.get_vox(v.x, v.y, v.z));
 	}
 	return (0);
+}
+
+const Node_v
+			*Vdb_test::get_interresting_node(s_vec3i v, uint32_t &value)
+{
+	value = 0;
+	if (v.x >= m_min.x && v.y >= m_min.y && v.z >= m_min.z
+		&& v.x < m_max.x && v.y < m_max.y && v.z < m_max.z)
+	{
+		return (m_root_static.get_interresting_node(v, value));
+	}
+	return (nullptr);
 }

@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:58:54 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 06:11:54 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 08:58:18 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,18 @@ Ray::Ray(s_vec3 ro, s_vec3 rd): m_ro(ro), m_rd(rd)
 
 int		Ray::launch(Vdb_test &vdb)
 {
-	int	found = 0;
-	int	s;
+	int			s;
+	uint32_t	found = 0;
+	const Node_v		*node_ptr;
 
 	for (int s = 0; s < MAX_STEP; s++)
 	{
-		if ((found = vdb.get_vox(m_pos)) != 0)
-			return (1);
+		node_ptr = vdb.get_interresting_node(m_pos, found);
+		//node_ptr->get_log();
+		if (found)
+			return (found);
+		else if (node_ptr == nullptr)
+			return (0);
 		if (calc_dist() > MAX_DIST)
 			return (0);
 		step();

@@ -6,7 +6,7 @@
 #    By: trobicho <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/02 20:38:42 by trobicho          #+#    #+#              #
-#    Updated: 2019/11/04 06:01:01 by trobicho         ###   ########.fr        #
+#    Updated: 2019/11/04 07:42:20 by trobicho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,8 @@ HDRS_NAME	=	Vdb_test.h \
 				libvdb.h \
 				Root_node.h \
 				Internal_node.h \
-				Leaf_node.h
+				Leaf_node.h \
+				Node.h
 
 OBJS_NAME	=	$(SRCS_NAME:.cpp=.o)
 
