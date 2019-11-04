@@ -6,7 +6,7 @@
 #    By: trobicho <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/02 20:38:42 by trobicho          #+#    #+#              #
-#    Updated: 2019/11/04 02:16:52 by trobicho         ###   ########.fr        #
+#    Updated: 2019/11/04 06:01:01 by trobicho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,8 @@ SRCS_PATH	=	./
 HDRS_PATH	=	./
 OBJS_PATH	=	./obj
 
-INCS_FLAGS	=
-LIBS_FLAGS	=
+INCS_FLAGS	= -I ../QGen/my_lib_cpp/
+LIBS_FLAGS	= -L ../QGen/my_lib_cpp/ -ltrl
 
 SDL_LOC		=	$(HOME)/.brew/Cellar/sdl2/2.0.9_1
 TTF_LOC		=	$(HOME)/.brew/Cellar/sdl2_ttf/2.0.15

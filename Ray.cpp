@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:58:54 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 02:52:04 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 06:11:54 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,22 @@ Ray::Ray(s_vec3 ro, s_vec3 rd): m_ro(ro), m_rd(rd)
 	}
 	else
 		m_side_dist.z = (m_pos.z + 1.0 - m_ro.z) * m_delta_dist.z;
+}
+
+int		Ray::launch(Vdb_test &vdb)
+{
+	int	found = 0;
+	int	s;
+
+	for (int s = 0; s < MAX_STEP; s++)
+	{
+		if ((found = vdb.get_vox(m_pos)) != 0)
+			return (1);
+		if (calc_dist() > MAX_DIST)
+			return (0);
+		step();
+	}
+	return (0);
 }
 
 void	Ray::step()

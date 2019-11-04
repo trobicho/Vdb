@@ -6,12 +6,14 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 06:04:11 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 02:56:12 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 06:07:30 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include "Renderer.h"
+
+#define SAMPLING	4
 
 Renderer::Renderer(Vdb_test &vdb, int w, int h):
 	m_vdb(vdb), m_width(w), m_height(h)
@@ -62,16 +64,24 @@ void	Renderer::ray_launch_all()
 {
 	s_vec3	color;
 
-	for (int y = 0; y < m_height; ++y)
+	for (int y = 0; y < m_height; y += SAMPLING)
 	{
-		for (int x = 0; x < m_width; ++x)
+		for (int x = 0; x < m_width; x += SAMPLING)
 		{
 			Ray	ray(m_cam.pos, pixel_to_rd(x, y));
 			color = get_color(ray);
-			m_pixels_buffer[x + y * m_width] =
-				(Uint32)(color.x * 255) << 16
-				| (Uint32)(color.y * 255) << 8 
-				| (Uint32)(color.z * 255);
+			for (int ys = 0; ys < SAMPLING
+				&& y + ys < m_height; ys++)
+			{
+				for (int xs = 0; xs < SAMPLING
+					&& x + xs < m_width; xs++)
+				{
+					m_pixels_buffer[x + xs + (y + ys) * m_width] =
+						(Uint32)(color.x * 255) << 16
+						| (Uint32)(color.y * 255) << 8 
+						| (Uint32)(color.z * 255);
+				}
+			}
 		}
 	}
 }
@@ -87,8 +97,13 @@ s_vec3	Renderer::get_color(Ray &ray)
 	color.x = (color.x + 1.0) / 2.0;
 	color.y = (color.y + 1.0) / 2.0;
 	color.z = (color.z + 1.0) / 2.0;
-	ray.step();
-	color = color.scalar(1.0 / (ray.calc_dist() * 2.0 + 1.0));
+	if (ray.launch(m_vdb))
+	{
+		color = s_vec3(1, 1, 1);
+		color = color.scalar(1.0 / (sqrt(ray.calc_dist() / 3.14 + 1.0)));
+	}
+	else
+		color = s_vec3(0, 0, 0);
 	return (color);
 }
 
