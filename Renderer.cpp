@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 06:04:11 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/03 08:33:41 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 02:56:12 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ void	Renderer::ray_launch_all()
 	{
 		for (int x = 0; x < m_width; ++x)
 		{
-			color = ray_launch(pixel_to_ray(x, y));
+			Ray	ray(m_cam.pos, pixel_to_rd(x, y));
+			color = get_color(ray);
 			m_pixels_buffer[x + y * m_width] =
 				(Uint32)(color.x * 255) << 16
 				| (Uint32)(color.y * 255) << 8 
@@ -75,14 +76,19 @@ void	Renderer::ray_launch_all()
 	}
 }
 
-s_vec3	Renderer::ray_launch(s_ray ray)
+s_vec3	Renderer::get_color(Ray &ray)
 {
 	s_vec3	color;
+	double	dist;
+	s_vec3	min(0, 0, 0);
+	s_vec3	max(5, 5, 5);
 
-	color = ray.rd;
-	color.x = (ray.rd.x + 1.0) / 2.0;
-	color.y = (ray.rd.y + 1.0) / 2.0;
-	color.z = (ray.rd.z + 1.0) / 2.0;
+	color = ray.get_dir();
+	color.x = (color.x + 1.0) / 2.0;
+	color.y = (color.y + 1.0) / 2.0;
+	color.z = (color.z + 1.0) / 2.0;
+	ray.step();
+	color = color.scalar(1.0 / (ray.calc_dist() * 2.0 + 1.0));
 	return (color);
 }
 
@@ -99,13 +105,13 @@ void	Renderer::check_event()
 				&& event.key.repeat == 0)
 			m_quit = 1;
 		else if (event.key.keysym.scancode == SDL_SCANCODE_W)
-			m_cam.translate(s_vec3(0.0, 0.0, 0.2));
+			m_cam.translate(s_vec3(0.0, 0.0, 0.1));
 		else if (event.key.keysym.scancode == SDL_SCANCODE_A)
-			m_cam.translate(s_vec3(-0.2, 0.0, 0.0));
+			m_cam.translate(s_vec3(-0.1, 0.0, 0.0));
 		else if (event.key.keysym.scancode == SDL_SCANCODE_S)
-			m_cam.translate(s_vec3(0.0, 0.0, -0.2));
+			m_cam.translate(s_vec3(0.0, 0.0, -0.1));
 		else if (event.key.keysym.scancode == SDL_SCANCODE_D)
-			m_cam.translate(s_vec3(0.2, 0.0, 0.0));
+			m_cam.translate(s_vec3(0.1, 0.0, 0.0));
 		else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
 			m_cam.rotate(m_cam.up, 3.14 / 45);
 		else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)
@@ -117,23 +123,20 @@ void	Renderer::check_event()
 	}
 }
 
-s_ray	Renderer::pixel_to_ray(int x, int y)
+s_vec3	Renderer::pixel_to_rd(int x, int y)
 {
-	s_ray	ray;
 	double	d_s;
-	s_vec3	dir;
+	s_vec3	rd;
 	double	lx;
 	double	ly;
 
 	d_s = 1.0;
 	lx = ((double)x / m_width) - 0.5;
 	ly = ((double)y / m_height) - 0.5;
-	ray.rd.x = m_cam.right.x * lx + m_cam.up.x * ly + m_cam.dir.x * d_s;
-	ray.rd.y = m_cam.right.y * lx + m_cam.up.y * ly + m_cam.dir.y * d_s;
-	ray.rd.z = m_cam.right.z * lx + m_cam.up.z * ly + m_cam.dir.z * d_s;
-	ray.rd.normalize();
-	ray.ro = m_cam.pos;
-	return (ray);
+	rd.x = m_cam.right.x * lx + m_cam.up.x * ly + m_cam.dir.x * d_s;
+	rd.y = m_cam.right.y * lx + m_cam.up.y * ly + m_cam.dir.y * d_s;
+	rd.z = m_cam.right.z * lx + m_cam.up.z * ly + m_cam.dir.z * d_s;
+	return (rd);
 }
 
 void	Renderer::refresh()

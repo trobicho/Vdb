@@ -6,7 +6,7 @@
 #    By: trobicho <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/02 20:38:42 by trobicho          #+#    #+#              #
-#    Updated: 2019/11/03 06:24:36 by trobicho         ###   ########.fr        #
+#    Updated: 2019/11/04 02:16:52 by trobicho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SDL_IFLAGS	=	-I $(HDRS_PATH) -I $(SDL_LOC)/include/SDL2 -I $(SDL_LOC)/include -I
 
 SRCS_NAME	=	main.cpp \
 				Renderer.cpp \
+				Ray.cpp \
 				camera.cpp \
 				vector.cpp \
 				quaternion.cpp \
@@ -35,6 +36,7 @@ SRCS_NAME	=	main.cpp \
 
 HDRS_NAME	=	Vdb_test.h \
 				Renderer.h \
+				Ray.h \
 				camera.h \
 				vector.h \
 				quaternion.h \

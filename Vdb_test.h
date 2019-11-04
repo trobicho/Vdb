@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 21:06:37 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/03 03:10:26 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 02:18:22 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 
 struct	s_vec3i
 {
+	s_vec3i(){};
+	s_vec3i(int32_t sx, int32_t sy, int32_t sz): x(sx), y(sy), z(sz){};
 	int32_t	x, y, z;
 };
 
@@ -34,6 +36,6 @@ class	Vdb_test
 
 	private:
 		Internal_L1	m_root_static = Internal_L1(4096, 4096, 4096);
-		s_vec3i		m_min = (s_vec3i){0, 0, 0};
-		s_vec3i		m_max = (s_vec3i){8192, 8192, 8192};
+		s_vec3i		m_min;
+		s_vec3i		m_max;
 };

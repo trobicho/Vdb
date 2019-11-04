@@ -6,13 +6,13 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 21:06:27 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/03 03:10:22 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 02:21:49 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Vdb_test.h"
 
-Vdb_test::Vdb_test()
+Vdb_test::Vdb_test(): m_min(0, 0, 0), m_max(8192, 8192, 8192)
 {
 }
 

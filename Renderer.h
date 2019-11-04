@@ -6,19 +6,14 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 06:02:59 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/03 07:23:14 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 02:18:40 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <SDL2/SDL.h>
 #include "Vdb_test.h"
 #include "camera.h"
-
-struct	s_ray
-{
-	s_vec3	ro, rd;
-	double	d = 0.0;
-};
+#include "Ray.h"
 
 class	Renderer
 {
@@ -28,10 +23,10 @@ class	Renderer
 
 		void	render_loop();
 		void	ray_launch_all();
-		s_vec3	ray_launch(s_ray ray);
+		s_vec3	get_color(Ray &ray);
 		void	check_event();
 		void	refresh();
-		s_ray	pixel_to_ray(int x, int y);
+		s_vec3	pixel_to_rd(int x, int y);
 		void	reset_pixels_buffer(Uint32 color = 0x0);
 
 	private:
