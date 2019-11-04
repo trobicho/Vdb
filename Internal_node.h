@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:22 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 08:54:24 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 09:29:42 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,5 @@ const Node<Value>	*Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 	else if (m_child_mask[internal_offset])
 		return (m_internal_data[internal_offset].child
 			->get_interresting_node(v, value));
-	return (nullptr);
+	return (this);
 }

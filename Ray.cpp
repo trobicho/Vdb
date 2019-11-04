@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:58:54 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 08:58:18 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 09:27:02 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ int		Ray::launch(Vdb_test &vdb)
 			return (found);
 		else if (node_ptr == nullptr)
 			return (0);
+		else
+		{
+		}
 		if (calc_dist() > MAX_DIST)
 			return (0);
 		step();

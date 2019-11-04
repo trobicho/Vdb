@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:57 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 08:59:27 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/04 09:27:13 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,5 @@ const Node<Value>	*Leaf_node<Value, Log2X, Log2Y, Log2Z>
 
 	if (m_value_mask[leaf_offset])
 		value = m_leaf_data[leaf_offset];
-	else
-		return (this);
-	return (nullptr);
+	return (this);
 }
