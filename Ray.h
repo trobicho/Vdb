@@ -6,14 +6,14 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:57:17 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 06:11:58 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/05 07:53:14 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "vector.h"
 #include "Vdb_test.h"
-#define		MAX_DIST	200
+#define		MAX_DIST	500
 #define		MAX_STEP	40
 
 class	Ray
@@ -24,6 +24,7 @@ class	Ray
 
 		int				launch(Vdb_test &dvb);
 		void			step();
+		void			step(const Node_v *node);
 		inline double	get_dist() const {return (m_d);};
 		inline s_vec3i	get_pos() const {return (m_pos);};
 		inline s_vec3	get_dir() const {return (m_rd);};

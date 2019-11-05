@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:22 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 09:29:42 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/05 06:43:42 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,17 @@ class Internal_node: public Node<Value>
 			sLog2Z = Log2Z + Child::sLog2Z,
 			sSize = 1 << (Log2X + Log2Y + Log2Z);
 	private:
+		inline bool			do_is_leaf() const {
+			return (false);
+		}
 		inline s_vec3i		do_get_log() const {
 			return s_vec3i(Log2X, Log2Y, Log2Z);
 		}
 		inline s_vec3i		do_get_slog() const {
 			return s_vec3i(sLog2X, sLog2Y, sLog2Z);
+		}
+		inline s_vec3i		do_get_child_slog() const {
+			return s_vec3i(Child::sLog2X, Child::sLog2Y, Child::sLog2Z);
 		}
 
 		union u_internal_data 

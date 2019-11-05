@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 06:04:11 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 06:07:30 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/05 08:05:22 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 Renderer::Renderer(Vdb_test &vdb, int w, int h):
 	m_vdb(vdb), m_width(w), m_height(h)
-	, m_cam(s_vec3(2, 2, 2), s_vec3(0, 0, 1), s_vec3(0, 1, 0), s_vec3(1, 0, 0))
+	, m_cam(s_vec3(1100, 1100, 900), s_vec3(0, 0, 1), s_vec3(0, 1, 0), s_vec3(1, 0, 0))
 {
 	m_win = SDL_CreateWindow("Vdb dda"
 		, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED
@@ -120,13 +120,13 @@ void	Renderer::check_event()
 				&& event.key.repeat == 0)
 			m_quit = 1;
 		else if (event.key.keysym.scancode == SDL_SCANCODE_W)
-			m_cam.translate(s_vec3(0.0, 0.0, 0.1));
+			m_cam.translate(s_vec3(0.0, 0.0, 5));
 		else if (event.key.keysym.scancode == SDL_SCANCODE_A)
-			m_cam.translate(s_vec3(-0.1, 0.0, 0.0));
+			m_cam.translate(s_vec3(-5, 0.0, 0.0));
 		else if (event.key.keysym.scancode == SDL_SCANCODE_S)
-			m_cam.translate(s_vec3(0.0, 0.0, -0.1));
+			m_cam.translate(s_vec3(0.0, 0.0, -5));
 		else if (event.key.keysym.scancode == SDL_SCANCODE_D)
-			m_cam.translate(s_vec3(0.1, 0.0, 0.0));
+			m_cam.translate(s_vec3(5, 0.0, 0.0));
 		else if (event.key.keysym.scancode == SDL_SCANCODE_RIGHT)
 			m_cam.rotate(m_cam.up, 3.14 / 45);
 		else if (event.key.keysym.scancode == SDL_SCANCODE_LEFT)

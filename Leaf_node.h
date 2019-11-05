@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:57 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 09:27:13 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/05 06:43:47 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,17 @@ class Leaf_node: public Node<Value>
 		static const int sLog2X = Log2X, sLog2Y = Log2Y, sLog2Z = Log2Z;
 
 	private:
+		inline bool			do_is_leaf() const {
+			return (true);
+		}
 		inline s_vec3i		do_get_log() const {
 			return s_vec3i(Log2X, Log2Y, Log2Z);
 		}
 		inline s_vec3i		do_get_slog() const {
 			return s_vec3i(sLog2X, sLog2Y, sLog2Z);
+		}
+		inline s_vec3i		do_get_child_slog() const {
+			return s_vec3i(1, 1, 1);
 		}
 
 		Value				m_leaf_data[sSize];	//direct access table
