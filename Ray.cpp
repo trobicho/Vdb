@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:58:54 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/05 10:07:11 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/05 11:22:05 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,10 +144,12 @@ void			Ray::step(const Node_v *node)
 		m_side_dist.x += n_side_dist_mul.x;
 		m_pos.x += n_side_dist.x * m_step.x;
 		dist = n_side_dist_mul.x;
+
 		double tmp;
 		tmp = (int)(dist / m_delta_dist.y);
 		m_pos.y += tmp * m_step.y;
 		m_side_dist.y += tmp * m_delta_dist.y;
+
 		tmp = (int)(dist / m_delta_dist.z);
 		m_pos.z += tmp * m_step.z;
 		m_side_dist.z += tmp * m_delta_dist.z;
@@ -158,10 +160,12 @@ void			Ray::step(const Node_v *node)
 		m_side_dist.y += n_side_dist_mul.y;
 		m_pos.y += n_side_dist.y * m_step.y;
 		dist = n_side_dist_mul.y;
+
 		double tmp;
 		tmp = (int)(dist / m_delta_dist.x);
 		m_pos.x += tmp * m_step.x;
 		m_side_dist.x += tmp * m_delta_dist.x;
+
 		tmp = (int)(dist / m_delta_dist.z);
 		m_pos.z += tmp * m_step.z;
 		m_side_dist.z += tmp * m_delta_dist.z;
@@ -172,10 +176,12 @@ void			Ray::step(const Node_v *node)
 		m_side_dist.z += n_side_dist_mul.z;
 		m_pos.z += n_side_dist.z * m_step.z;
 		dist = n_side_dist_mul.z;
+
 		double tmp;
 		tmp = (int)(dist / m_delta_dist.x);
 		m_pos.x += tmp * m_step.x;
 		m_side_dist.x += tmp * m_delta_dist.x;
+
 		tmp = (int)(dist / m_delta_dist.y);
 		m_pos.y += tmp * m_step.y;
 		m_side_dist.y += tmp * m_delta_dist.y;
