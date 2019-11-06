@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 06:02:59 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 02:18:40 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/06 18:29:36 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,5 @@ class	Renderer
 		Vdb_test		&m_vdb;
 		bool			m_quit = false;
 		Camera			m_cam;
+		bool			m_render_tree = false;
 };

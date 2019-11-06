@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 21:06:27 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/04 08:56:06 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/06 17:29:00 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,9 @@ const Node_v
 		return (m_root_static.get_interresting_node(v, value));
 	}
 	return (nullptr);
+}
+
+void		Vdb_test::pruning()
+{
+	m_root_static.pruning();
 }

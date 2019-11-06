@@ -6,18 +6,18 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 06:04:11 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/05 08:05:22 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/06 18:53:10 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include "Renderer.h"
 
-#define SAMPLING	4
+#define SAMPLING	6
 
 Renderer::Renderer(Vdb_test &vdb, int w, int h):
 	m_vdb(vdb), m_width(w), m_height(h)
-	, m_cam(s_vec3(1100, 1100, 900), s_vec3(0, 0, 1), s_vec3(0, 1, 0), s_vec3(1, 0, 0))
+	, m_cam(s_vec3(1100, 1000, 950), s_vec3(0, 0, 1), s_vec3(0, 1, 0), s_vec3(1, 0, 0))
 {
 	m_win = SDL_CreateWindow("Vdb dda"
 		, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED
@@ -99,11 +99,22 @@ s_vec3	Renderer::get_color(Ray &ray)
 	color.z = (color.z + 1.0) / 2.0;
 	if (ray.launch(m_vdb))
 	{
-		color = s_vec3(1, 1, 1);
-		color = color.scalar(1.0 / (sqrt(ray.calc_dist() / 3.14 + 1.0)));
+		if (ray.get_side() == 0)
+			color = s_vec3(1, 0, 1);
+		else if (ray.get_side() == 1)
+			color = s_vec3(0, 1, 1);
+		else if (ray.get_side() == 2)
+			color = s_vec3(1, 1, 0);
+		dist = ray.calc_dist() / 10.0;
+		color = color.scalar(1.0 / (dist + 1.0));
 	}
 	else
 		color = s_vec3(0, 0, 0);
+	if (m_render_tree)
+		color = color.add(ray.get_color());
+	color.x = pow(color.x, 1 / 2.2);
+	color.y = pow(color.y, 1 / 2.2);
+	color.z = pow(color.z, 1 / 2.2);
 	return (color);
 }
 
@@ -135,6 +146,8 @@ void	Renderer::check_event()
 			m_cam.rotate(m_cam.right, -3.14 / 45);
 		else if (event.key.keysym.scancode == SDL_SCANCODE_UP)
 			m_cam.rotate(m_cam.right, 3.14 / 45);
+		else if (event.key.keysym.scancode == SDL_SCANCODE_T)
+			m_render_tree = !m_render_tree;
 	}
 }
 

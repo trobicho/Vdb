@@ -6,7 +6,7 @@
 #    By: trobicho <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/02 20:38:42 by trobicho          #+#    #+#              #
-#    Updated: 2019/11/04 07:42:20 by trobicho         ###   ########.fr        #
+#    Updated: 2019/11/06 16:53:48 by trobicho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,10 +21,11 @@ OBJS_PATH	=	./obj
 INCS_FLAGS	= -I ../QGen/my_lib_cpp/
 LIBS_FLAGS	= -L ../QGen/my_lib_cpp/ -ltrl
 
-SDL_LOC		=	$(HOME)/.brew/Cellar/sdl2/2.0.9_1
+SDL_LOC		=	$(HOME)/.brew/Cellar/sdl2/2.0.10
 TTF_LOC		=	$(HOME)/.brew/Cellar/sdl2_ttf/2.0.15
-SDL_LFLAGS	=	-L $(SDL_LOC)/lib -lSDL2 -L$(TTF_LOC)/lib -lSDL2_ttf
-SDL_IFLAGS	=	-I $(HDRS_PATH) -I $(SDL_LOC)/include/SDL2 -I $(SDL_LOC)/include -I $(TTF_LOC)/include -I ./libft
+IMG_LOC		=	$(HOME)/.brew/Cellar/sdl2_image/2.0.5
+SDL_LFLAGS	=	-L $(SDL_LOC)/lib -lSDL2 -L$(TTF_LOC)/lib -lSDL2_ttf -L$(IMG_LOC)/lib -lSDL2_image
+SDL_IFLAGS	=	-I $(HDRS_PATH) -I $(SDL_LOC)/include/SDL2 -I $(SDL_LOC)/include -I $(TTF_LOC)/include -I $(IMG_LOC)/include -I ./libft
 
 SRCS_NAME	=	main.cpp \
 				Renderer.cpp \

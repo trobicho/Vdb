@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:22 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/05 06:43:42 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/06 17:52:00 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Internal_node: public Node<Value>
 
 		void		do_set_vox(Value v, int32_t x, int32_t y, int32_t z);
 		Value		do_get_vox(int32_t x, int32_t y, int32_t z) const;
+		Value		pruning();
 		const Node<Value>
 					*do_get_interresting_node(s_vec3i v, Value &value) const;
 
@@ -76,7 +77,8 @@ Internal_node<Value, Child, Log2X, Log2Y, Log2Z>::~Internal_node()
 {
 	for (int i = 0; i < sSize; ++i)
 	{
-		delete m_internal_data[i].child;
+		if (m_child_mask[i])
+			delete m_internal_data[i].child;
 		m_internal_data[i].child = nullptr;
 	}
 }
@@ -133,4 +135,29 @@ const Node<Value>	*Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 		return (m_internal_data[internal_offset].child
 			->get_interresting_node(v, value));
 	return (this);
+}
+template <class Value, class Child, int Log2X, int Log2Y, int Log2Z>
+Value	Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
+	::pruning()
+{
+	Value	val;
+
+	for (int i = 0; i < sSize; i++)
+	{
+		if (m_child_mask[i])
+		{
+			if ((val = m_internal_data[i].child->pruning()) != 0)
+			{
+				m_child_mask.set(i, false);
+				m_value_mask.set(i, true);
+				delete(m_internal_data[i].child);
+				m_internal_data[i].value = val;
+			}
+		}
+	}
+	if (m_value_mask.all())
+	{
+		return (m_internal_data[0].value);
+	}
+	return (0);
 }

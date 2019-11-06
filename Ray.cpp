@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:58:54 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/05 11:22:05 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/06 18:21:14 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int		Ray::launch(Vdb_test &vdb)
 		}
 		else
 			step();
-		if (calc_dist() > MAX_DIST)
+		if (calc_dist() >= MAX_DIST)
 			return (0);
 	}
 	return (0);
@@ -93,7 +93,7 @@ void	Ray::step()
 	}
 }
 
-void			Ray::step(const Node_v *node)
+int			Ray::step(const Node_v *node)
 {
 	s_vec3	n_delta_dist;
 	s_vec3	n_side_dist;
@@ -137,15 +137,19 @@ void			Ray::step(const Node_v *node)
 		if (n_side_dist.z == 0)
 			n_side_dist.z = 1 << child_slog.z;
 	}
+	int tmp;
+	s_vec3	s_d = m_side_dist;
+	s_vec3i	p = m_pos;
+	int		p_side;
 	n_side_dist_mul = n_side_dist.mul(m_delta_dist);
 	if (n_side_dist_mul.x < n_side_dist_mul.y
 			&& n_side_dist_mul.x < n_side_dist_mul.z)
 	{
+		/*
 		m_side_dist.x += n_side_dist_mul.x;
 		m_pos.x += n_side_dist.x * m_step.x;
 		dist = n_side_dist_mul.x;
 
-		double tmp;
 		tmp = (int)(dist / m_delta_dist.y);
 		m_pos.y += tmp * m_step.y;
 		m_side_dist.y += tmp * m_delta_dist.y;
@@ -154,14 +158,27 @@ void			Ray::step(const Node_v *node)
 		m_pos.z += tmp * m_step.z;
 		m_side_dist.z += tmp * m_delta_dist.z;
 		m_side = 0;
+		*/
+		p.x += n_side_dist.x * m_step.x;
+		/*
+		s_d.x += n_side_dist_mul.x; 
+		dist = n_side_dist_mul.x;
+		tmp = (int)(dist / m_delta_dist.y);
+		s_d.y += tmp * m_delta_dist.y;
+		p.y += tmp * m_step.y;
+		tmp = (int)(dist / m_delta_dist.z);
+		s_d.z += tmp * m_delta_dist.z;
+		p.z += tmp * m_step.z;
+		*/
+		p_side = 0;
 	}
 	else if (n_side_dist_mul.y < n_side_dist_mul.z)
 	{
+		/*
 		m_side_dist.y += n_side_dist_mul.y;
 		m_pos.y += n_side_dist.y * m_step.y;
 		dist = n_side_dist_mul.y;
 
-		double tmp;
 		tmp = (int)(dist / m_delta_dist.x);
 		m_pos.x += tmp * m_step.x;
 		m_side_dist.x += tmp * m_delta_dist.x;
@@ -170,14 +187,27 @@ void			Ray::step(const Node_v *node)
 		m_pos.z += tmp * m_step.z;
 		m_side_dist.z += tmp * m_delta_dist.z;
 		m_side = 1;
+		*/
+		p.y += n_side_dist.y * m_step.y;
+		/*
+		s_d.y += n_side_dist_mul.y; 
+		dist = n_side_dist_mul.y;
+		tmp = (int)(dist / m_delta_dist.x);
+		s_d.x += tmp * m_delta_dist.x;
+		p.x += tmp * m_step.x;
+		tmp = (int)(dist / m_delta_dist.z);
+		s_d.z += tmp * m_delta_dist.z;
+		p.z += tmp * m_step.z;
+		*/
+		p_side = 1;
 	}
 	else
 	{
+		/*
 		m_side_dist.z += n_side_dist_mul.z;
 		m_pos.z += n_side_dist.z * m_step.z;
 		dist = n_side_dist_mul.z;
 
-		double tmp;
 		tmp = (int)(dist / m_delta_dist.x);
 		m_pos.x += tmp * m_step.x;
 		m_side_dist.x += tmp * m_delta_dist.x;
@@ -186,7 +216,56 @@ void			Ray::step(const Node_v *node)
 		m_pos.y += tmp * m_step.y;
 		m_side_dist.y += tmp * m_delta_dist.y;
 		m_side = 2;
+		s_d.z += n_side_dist_mul.z; 
+		*/
+		p.z += n_side_dist.z * m_step.z;
+		/*
+		dist = n_side_dist_mul.z;
+		tmp = (int)(dist / m_delta_dist.x);
+		s_d.x += tmp * m_delta_dist.x;
+		p.x += tmp * m_step.x;
+		tmp = (int)(dist / m_delta_dist.y);
+		s_d.y += tmp * m_delta_dist.y;
+		p.y += tmp * m_step.y;
+		*/
+		p_side = 2;
 	}
+	/*
+	std::cout << "begin side_dist: {" << m_side_dist.x << ", " << m_side_dist.y <<  ", " << m_side_dist.z << "}" << std::endl;
+	std::cout << "begin pos: {" << m_pos.x << ", " << m_pos.y <<  ", " << m_pos.z << "}" << std::endl;
+	std::cout << "proj s_d: {" << s_d.x << ", " << s_d.y <<  ", " << s_d.z << "}" << std::endl;
+	std::cout << "proj p: {" << p.x << ", " << p.y <<  ", " << p.z << "}" << std::endl;
+	std::cout << "proj side: " << p_side << std::endl;
+	*/
+	int s;
+	for (s = 0; ; ++s)
+	{
+		if (p_side == 0 && m_pos.x == p.x)
+			break;
+		if (p_side == 1 && m_pos.y == p.y)
+			break;
+		if (p_side == 2 && m_pos.z == p.z)
+			break;
+		step();
+	}
+	/*
+	std::cout << "after step: " << s << std::endl;
+	std::cout << "true side_dist: {" << m_side_dist.x << ", " << m_side_dist.y <<  ", " << m_side_dist.z << "}" << std::endl;
+	std::cout << "true pos: {" << m_pos.x << ", " << m_pos.y <<  ", " << m_pos.z << "}" << std::endl;
+	std::cout << "true side: " << m_side << std::endl;
+	std::cout <<"=======================================" << std::endl << std::endl;
+	*/
+	if (child_slog.x == 7)
+	{
+		m_color.x += 0.1;
+		return (50);
+	}
+	if (child_slog.x == 3)
+	{
+		m_color.y += 0.01;
+		return (8);
+	}
+	return (s);
 }
 
 double	Ray::calc_dist()
