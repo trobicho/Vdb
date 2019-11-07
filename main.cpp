@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:39:09 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/06 19:01:59 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/07 16:49:40 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ int		add_voxel_from_img(Vdb_test &vdb, const char *file_name, s_vbox box)
 				vox.z += box.origin.z;
 				vdb.set_vox(1, vox);
 				nb_vox++;
+				if (nb_vox > 0 && nb_vox % 200000000 == 0)
+				{
+					vdb.pruning();
+					std::cout << "prunning" << std::endl;
+					std::cout << (z / (double)box.len.x) * 100.0 << "%"  << std::endl;
+					std::cout << "total of " << nb_vox << " voxels." << std::endl;
+				}
 			}
 		}
 	}
@@ -67,7 +74,7 @@ int		add_voxel_from_img(Vdb_test &vdb, const char *file_name, s_vbox box)
 int		main(int ac, char **av)
 {
 	Vdb_test	my_vdb;
-	Renderer	renderer(my_vdb, 800, 600);
+	Renderer	renderer(my_vdb, 700, 700);
 	auto&		mt = trl::req_mt_ref();
 	std::uniform_int_distribution<int>
 			dis(0, 1000);
@@ -75,8 +82,8 @@ int		main(int ac, char **av)
 
 	IMG_Init(IMG_INIT_PNG);
 	box.origin = s_vec3i(1000, 1000, 1000);
-	box.len = s_vec3i(512, 64, 512);
-	if (add_voxel_from_img(my_vdb, "./noise3d.png", box))
+	box.len = s_vec3i(6000, 512, 6000);
+	if (add_voxel_from_img(my_vdb, "./map_img/noise3d.png", box))
 		return (1);
 	IMG_Quit();
 	my_vdb.pruning();

@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:58:54 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/06 18:21:14 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/07 16:02:27 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,21 @@ Ray::Ray(s_vec3 ro, s_vec3 rd): m_ro(ro), m_rd(rd)
 	m_step = s_vec3i(1, 1, 1);
 	if (m_rd.x < 0)
 	{
-		m_step.x = -1.0;
+		m_step.x = -1;
 		m_side_dist.x = (m_ro.x - m_pos.x) * m_delta_dist.x;
 	}
 	else
 		m_side_dist.x = (m_pos.x + 1.0 - m_ro.x) * m_delta_dist.x;
 	if (m_rd.y < 0)
 	{
-		m_step.y = -1.0;
+		m_step.y = -1;
 		m_side_dist.y = (m_ro.y - m_pos.y) * m_delta_dist.y;
 	}
 	else
 		m_side_dist.y = (m_pos.y + 1.0 - m_ro.y) * m_delta_dist.y;
 	if (m_rd.z < 0)
 	{
-		m_step.z = -1.0;
+		m_step.z = -1;
 		m_side_dist.z = (m_ro.z - m_pos.z) * m_delta_dist.z;
 	}
 	else
@@ -258,12 +258,12 @@ int			Ray::step(const Node_v *node)
 	if (child_slog.x == 7)
 	{
 		m_color.x += 0.1;
-		return (50);
+		return (40);
 	}
 	if (child_slog.x == 3)
 	{
 		m_color.y += 0.01;
-		return (8);
+		return (4);
 	}
 	return (s);
 }

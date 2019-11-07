@@ -6,15 +6,15 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:57:17 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/06 18:36:49 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/07 16:02:46 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "vector.h"
 #include "Vdb_test.h"
-#define		MAX_DIST	400
-#define		MAX_STEP	100
+#define		MAX_DIST	400.0
+#define		MAX_STEP	150
 
 class	Ray
 {

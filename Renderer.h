@@ -6,14 +6,18 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 06:02:59 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/06 18:29:36 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/07 16:01:30 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <thread>
 #include <SDL2/SDL.h>
 #include "Vdb_test.h"
 #include "camera.h"
 #include "Ray.h"
+
+#define SAMPLING	5
+#define NB_THREAD	8
 
 class	Renderer
 {
@@ -23,6 +27,7 @@ class	Renderer
 
 		void	render_loop();
 		void	ray_launch_all();
+		void	ray_launch_thread(int tid);
 		s_vec3	get_color(Ray &ray);
 		void	check_event();
 		void	refresh();
@@ -41,4 +46,5 @@ class	Renderer
 		bool			m_quit = false;
 		Camera			m_cam;
 		bool			m_render_tree = false;
+		std::thread		m_thread[NB_THREAD];
 };

@@ -6,14 +6,12 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/03 06:04:11 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/06 18:53:10 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/07 16:00:58 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include "Renderer.h"
-
-#define SAMPLING	6
 
 Renderer::Renderer(Vdb_test &vdb, int w, int h):
 	m_vdb(vdb), m_width(w), m_height(h)
@@ -62,9 +60,21 @@ void	Renderer::render_loop()
 
 void	Renderer::ray_launch_all()
 {
+	for (int t = 0; t < NB_THREAD; t++)
+	{
+		m_thread[t] = std::thread([=] { ray_launch_thread(t); });
+	}
+	for (int t = 0; t < NB_THREAD; t++)
+	{
+		m_thread[t].join();
+	}
+}
+
+void	Renderer::ray_launch_thread(int tid)
+{
 	s_vec3	color;
 
-	for (int y = 0; y < m_height; y += SAMPLING)
+	for (int y = tid * SAMPLING; y < m_height; y += SAMPLING * NB_THREAD)
 	{
 		for (int x = 0; x < m_width; x += SAMPLING)
 		{
@@ -146,8 +156,24 @@ void	Renderer::check_event()
 			m_cam.rotate(m_cam.right, -3.14 / 45);
 		else if (event.key.keysym.scancode == SDL_SCANCODE_UP)
 			m_cam.rotate(m_cam.right, 3.14 / 45);
+		else if (event.key.keysym.scancode == SDL_SCANCODE_KP_7)
+			m_cam.rotate(m_cam.dir, -3.14 / 45);
+		else if (event.key.keysym.scancode == SDL_SCANCODE_KP_9)
+			m_cam.rotate(m_cam.dir, 3.14 / 45);
+		else if (event.key.keysym.scancode == SDL_SCANCODE_UP)
+			m_cam.rotate(m_cam.right, 3.14 / 45);
 		else if (event.key.keysym.scancode == SDL_SCANCODE_T)
 			m_render_tree = !m_render_tree;
+	}
+	while (SDL_PollEvent(&event))
+	{
+		if (event.type == SDL_QUIT)
+			m_quit = 1;
+		else if (event.type == SDL_KEYDOWN)
+		{
+			if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+				m_quit = 1;
+		}
 	}
 }
 
