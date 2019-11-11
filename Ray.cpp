@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 01:58:54 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/07 16:02:27 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/11 06:11:02 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int		Ray::launch(Vdb_test &vdb)
 
 	for (int s = 0; s < MAX_STEP; s++)
 	{
+		if (calc_dist() >= MAX_DIST)
+			return (0);
 		node_ptr = vdb.get_interresting_node(m_pos, found);
 		//node_ptr->get_log();
 		if (found)
@@ -65,8 +67,6 @@ int		Ray::launch(Vdb_test &vdb)
 		}
 		else
 			step();
-		if (calc_dist() >= MAX_DIST)
-			return (0);
 	}
 	return (0);
 }
@@ -115,7 +115,11 @@ int			Ray::step(const Node_v *node)
 		n_side_dist.x = m_pos.x - (((m_pos.x >> child_slog.x))
 					<< child_slog.x);
 		if (n_side_dist.x == 0)
+		{
+			step();
+			return (1);
 			n_side_dist.x = 1 << child_slog.x;
+		}
 	}
 	if (m_step.y > 0)
 		n_side_dist.y = (((m_pos.y >> child_slog.y) + 1)
@@ -125,7 +129,11 @@ int			Ray::step(const Node_v *node)
 		n_side_dist.y = m_pos.y - (((m_pos.y >> child_slog.y))
 					<< child_slog.y);
 		if (n_side_dist.y == 0)
+		{
+			step();
+			return (1);
 			n_side_dist.y = 1 << child_slog.y;
+		}
 	}
 	if (m_step.z > 0)
 		n_side_dist.z = (((m_pos.z >> child_slog.z) + 1)
@@ -135,7 +143,11 @@ int			Ray::step(const Node_v *node)
 		n_side_dist.z = m_pos.z - (((m_pos.z >> child_slog.z))
 					<< child_slog.z);
 		if (n_side_dist.z == 0)
-			n_side_dist.z = 1 << child_slog.z;
+		{
+			step();
+			return (1);
+			//n_side_dist.z = 1 << child_slog.z;
+		}
 	}
 	int tmp;
 	s_vec3	s_d = m_side_dist;
