@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:39:09 by trobicho          #+#    #+#             */
-/*   Updated: 2019/11/07 16:49:40 by trobicho         ###   ########.fr       */
+/*   Updated: 2019/11/11 01:43:48 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int		main(int ac, char **av)
 
 	IMG_Init(IMG_INIT_PNG);
 	box.origin = s_vec3i(1000, 1000, 1000);
-	box.len = s_vec3i(6000, 512, 6000);
+	box.len = s_vec3i(1000, 128, 1000);
 	if (add_voxel_from_img(my_vdb, "./map_img/noise3d.png", box))
 		return (1);
 	IMG_Quit();
